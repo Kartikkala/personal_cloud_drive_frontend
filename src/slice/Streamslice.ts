@@ -9,7 +9,7 @@ const Stream_slice = createSlice({
     reducers: {
         nullset: (state) => null,
         changestate: (state, val) => {
-            return val.payload;
+            return val.payload
         }
     },
 

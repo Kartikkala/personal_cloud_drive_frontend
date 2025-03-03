@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import FileList from './FileList';
-
+import axios from 'axios'
 
 
 const Streamfile = () => {
@@ -13,6 +13,8 @@ const Streamfile = () => {
     const videofilename = useAppSelector((state) => state.Stream_slice);
     const videofiles = useAppSelector((state) => state.Video_file);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const mediaSourceRef = useRef<MediaSource | null>(null);
+    const sourceBufferRef = useRef<SourceBuffer | null>(null);
 
     const backarrowclick = () => {
         navigate("/");
@@ -20,11 +22,63 @@ const Streamfile = () => {
     }
 
     useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.removeAttribute('src');
-            videoRef.current.load();
+
+        
+        mediaSourceRef.current = new MediaSource();
+        const mediaSource = mediaSourceRef.current;
+
+        if (videoRef.current  && !videoRef.current.src) {
+            videoRef.current.src = URL.createObjectURL(mediaSource)
         }
+            let start = 0;
+
+            const fetchSegment = async (sourceBuffer : SourceBuffer)=>
+            {
+                console.log("Fetch segment called!")
+                console.log("Ready state: ", mediaSource.readyState)
+                try{
+                    const token = localStorage.getItem('token');
+                    const response = await axios.post(
+                        'http://localhost:5000/api/fs/stream',
+                        { filepath: videofilename },
+                        {
+                            headers: { Range: `bytes=${start}-${start + 1_000_000 - 1}`,
+                            "Authorization": token }, // Set Range headers
+                            responseType: 'arraybuffer', // Get binary data
+                        }
+                    );
+
+                    console.log(response)
+                    
+                    const data = response.data;
+                    // const contentRange = response.headers["content-range"]; // Get total size from response
+                    // const totalSize = contentRange ? parseInt(contentRange.split('/')[1]) : null;
+                    if(!sourceBuffer.updating && mediaSource.readyState === 'open')
+                    {
+                        sourceBuffer.appendBuffer(data);
+                        start += 1_000_000;
+                    }
+                }
+                catch(e)
+                {
+                    console.error("Axios error", e)
+                }
+            }
+
+            mediaSource.addEventListener('sourceopen', ()=>{
+                const mimeCodec = 'video/mp4; codecs="avc1.42E01E"';
+                const sourceBuffer = mediaSource.addSourceBuffer(mimeCodec)
+                sourceBufferRef.current = sourceBuffer;
+                sourceBuffer.mode = 'segments'
+                sourceBuffer.addEventListener('updateend',()=>{
+                    fetchSegment(sourceBuffer)
+                })
+                fetchSegment(sourceBuffer);
+                sourceBuffer.addEventListener('error', (e)=>{
+                    console.error("Source buffer error: ", e)
+                })
+            })
+
     }, [videofilename])
 
     return (
@@ -34,8 +88,7 @@ const Streamfile = () => {
                 <div className="text-xl font-bold">Video Streaming</div>
             </div>
 
-            <video ref={videoRef} className='my-7 w-10/12 h-auto' controls>
-                <source src={`http://localhost:5000/api/fs/downloadFIleClient/${videofilename}`} />
+            <video ref={videoRef} className='my-7 w-10/12 h-auto' controls preload='auto'>
                 Video tag is not supported by the your browser
             </video>
 

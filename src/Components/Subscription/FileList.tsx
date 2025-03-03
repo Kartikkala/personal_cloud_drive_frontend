@@ -101,8 +101,8 @@ const FileList = (props: myprops) => {
 
     const playclick = () => {
         if (file_type == "Videos") {
-            const encodeURI = encodeURIComponent("/" + fileobj.name);
-            dispatch(changestate(encodeURI));
+            const filepath = "/"+fileobj.name
+            dispatch(changestate(filepath));
             navigate("/Streamvideos");
         }
     }
