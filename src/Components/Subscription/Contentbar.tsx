@@ -53,95 +53,7 @@ const Contentbar = (props: getting_props) => {
     const dispatch = useAppDispatch();
 
     const location = useLocation();
-
-    // sample date of files:
-    const data: mydata[] = [
-        {
-            "size": 51042,
-            "birthtime": "2024-04-02T18:35:59.987Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.1.html"
-        },
-        {
-            "size": 510489,
-            "birthtime": "2024-05-02T18:39:01.534Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "extaction_chi.html"
-        },
-        {
-            "size": 510789,
-            "birthtime": "2024-04-02T18:40:31.984Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "pirates_of_carbaian.html"
-        },
-        {
-            "size": 510423,
-            "birthtime": "2024-03-20T18:41:23.531Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.mp4"
-        },
-        {
-            "size": 510498,
-            "birthtime": "2024-03-02T18:42:37.529Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.mp3"
-        },
-        {
-            "size": 510445,
-            "birthtime": "2024-02-30T18:43:46.773Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.mp3"
-        },
-        {
-            "size": 51046,
-            "birthtime": "2024-05-24T18:55:10.468Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.png"
-        },
-        {
-            "size": 510400,
-            "birthtime": "2024-03-12T18:56:39.901Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.pdf"
-        }, {
-            "size": 510490,
-            "birthtime": "2024-01-12T18:56:39.901Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.ppt"
-        }, {
-            "size": 519900,
-            "birthtime": "2024-05-12T18:56:39.901Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.ppt"
-        }, {
-            "size": 510890,
-            "birthtime": "2024-06-12T18:56:39.901Z",
-            "directory": false,
-            "file": true,
-            "symlink": false,
-            "name": "index.zip"
-        }
-    ]
+    
     // inital data object for sizedata state variable:
     const sizedata: size = {
         videofilesize: 0,
@@ -249,7 +161,7 @@ const Contentbar = (props: getting_props) => {
 
         files_copy.sort((a, b) => new Date(b.birthtime).getTime() - new Date(a.birthtime).getTime());
         setfiles_additional(files_copy);
-        const latest_arr = files_copy.slice(0, 5);
+        const latest_arr = files_copy;
         setlatest_files(latest_arr);
 
         setvideofiles(videos);
@@ -283,22 +195,21 @@ const Contentbar = (props: getting_props) => {
 
 
     return (
-        <div className="h-[97%] w-full box-border border-b-2 border-white flex justify-center">
+        <div className="h-full w-full flex justify-center border-primary-border-color border rounded-xl">
             {!downloadhistory && <div className="w-[94%] h-full overflow-y-hidden ">
 
                 {/* Search bar */}
-                <div className={`2xl:h-[4.4rem] sm:h-16 h-14  flex items-center xl:justify-normal justify-center bg-gray-700 rounded-lg ${location.pathname == "/home" ? "2xl:mb-[4%] mb-[5%]" : "2xl:mb-[1%] mb-[2%]"} `}>
+                <div className={`flex my-6 rounded-lg ${location.pathname == "/home" ? "2xl:mb-[4%]" : "2xl:mb-[1%]]"} `}>
 
-                    <div className="relative bg-white xl:h-12 sm:h-11 h-10 xl:w-4/6 sm:w-9/12 w-10/12 flex justify-center items-center rounded xl:ml-16">
-                        <label htmlFor="search" className="absolute sm:text-2xl text-xl xs:left-4 left-3 xl:bottom-[0.85rem]  bottom-3 border-black">
+                    <div className="relative gap-2 w-3/4 justify-around bg-primary-background border border-primary-border-color rounded-3xl flex p-3">
+                        <label htmlFor="search" className="sm:text-2xl text-xl xl:bottom-[0.85rem] text-text-secondary bottom-3 border-black">
                             <BiSearchAlt2 />
-
                         </label>
-                        <input type="text" onChange={search_onchange} className="focus:outline-none font-Josefin xl:ml-0 ml-8 w-4/5 md:text-base sm:text-lg text-base" name="search" id="search" placeholder="Search by Name" value={searchbar} />
+                        <input type="text" onChange={search_onchange} className="text-text-secondary focus:outline-none font-Josefin xl:ml-0 ml-8 w-full md:text-base sm:text-lg bg-primary-background" name="search" id="search" placeholder="Search by Name" value={searchbar} />
                     </div>
                 </div>
 
-                {!searchbar && <div className={` overflow-y-auto ${location.pathname == "/" ? " 2xl:h-[86%] h-[87%]" : " 2xl:h-[90%] h-[91%]"} ${location.pathname == "/" ? "bg-gray-200" : "bg-gray-100 rounded-t-xl"}`}>
+                {!searchbar && <div className={`border-primary-border-color bg-primary-background rounded-3xl overflow-y-auto ${location.pathname == "/" ? " 2xl:h-[86%] h-[87%]" : " 2xl:h-[90%] h-[91%]"} ${location.pathname == "/" ? "" : " rounded-t-xl"}`}>
                     <Routes>
                         <Route path="/category/Videos" element={<ShowFiles data={videofiles} />}></Route>
                         <Route path="/category/Audios" element={<ShowFiles data={audiofiles} />}></Route>
@@ -308,29 +219,30 @@ const Contentbar = (props: getting_props) => {
                     </Routes>
 
                     {location.pathname == "/" && <div>
-                        <h1 className="xl:text-3xl text-2xl font-bold mb-7">Categories:</h1>
-                        <div className="grid 3xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-4 xs:grid-cols-3 grid-cols-2 3xl:gap-x-10 gap-5 justify-items-center">
+                        <div className="flex gap-3 justify-items-center">
                             {elements.map((value) => {
                                 return <Categoriescard key={String(value.tag)} item={value} />;
                             })}
                         </div>
 
-                        <h1 className="xl:text-3xl text-2xl font-bold my-7">Recent Files:</h1>
-                        <div className="flex justify-between lg:px-4 px-2 pb-2 border-b-[1.5px] border-black font-semibold md:text-base text-sm">
-                            <div className="w-[45%]">Name</div>
-                            <div className="w-[26%]">Size</div>
-                            <div className="w-[26%]">Date</div>
-                            <div className="w-[3%]"></div>
+                        <h1 className="xl:text-3xl text-2xl font-bold my-7 text-text-heading">All Files</h1>
+                        <div className="flex justify-between lg:px-4 px-2 pb-2 font-semibold md:text-base text-sm">
+                            <div className="w-[45%] text-text-heading">Name</div>
+                            <div className="w-[26%] text-text-heading">Size</div>
+                            <div className="w-[26%] text-text-heading">Date</div>
+                            <div className="w-[3%] text-text-heading"></div>
                         </div>
-                        {latest_files && latest_files.map((value, index) => {
-                            return <File key={index} fileobj={value} file_type={value.category} />
-                        })}
+                        <div className="flex flex-col gap-2 overflow-auto">
+                            {latest_files && latest_files.map((value, index) => {
+                                return <File key={index} fileobj={value} file_type={value.category} />
+                            })}
+                        </div>
                     </div>}
 
                 </div>}
                 {
 
-                    searchbar && <div className="overflow-y-auto 2xl:h-[86%] h-[87%] bg-gray-200 mt-5">
+                    searchbar && <div className="overflow-y-auto 2xl:h-[86%] h-[87%] bg-primary-background mt-5">
                         <div className="flex justify-between lg:px-4 px-2 pb-2 border-b-[1.5px] border-black font-semibold md:text-base text-sm">
                             <div className="w-[45%]">Name</div>
                             <div className="w-[26%]">Size</div>

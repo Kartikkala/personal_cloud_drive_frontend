@@ -109,30 +109,31 @@ const FileList = (props: myprops) => {
 
     return (
 
-        <div className='h-12 hover:bg-gray-300 border-b-[1.5px] border-gray-500 flex justify-between items-center font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs'>
+        <div className='h-12 hover:bg-secondary-background bg-primary-background border border-primary-border-color rounded-3xl flex justify-between items-center font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs text-text-primary'>
             <div className="flex w-[45%] items-center">
                 {Selectedicon && <Selectedicon className="sm:text-2xl text-xl xl:pr-2 text-blue-500" />}
                 <div className="">{fileobj.name}</div>
             </div>
 
-            <div className="w-[26%]">{fileobj.size.toFixed(3)}mb</div>
+            <div className="w-[26%]">{fileobj.size.toFixed(2)} MB</div>
             <div className="w-[26%] ">{fileobj.birthtime.split('T')[0]}</div>
             <div className="w-[3%] h-full hover:cursor-pointer border-blue-500 flex justify-center ">
 
+                
                 <Menubar className="w-full h-full">
-                    <MenubarMenu >
-                        <MenubarTrigger className='h-full w-full flex justify-center'>
-                            <HiDotsVertical className='' />
+                    <MenubarMenu>
+                        <MenubarTrigger className='h-full w-full flex justify-center focus:bg-secondary-background hover:bg-secondary-background'>
+                            <HiDotsVertical className=' focus:text-text-primary text-text-primary'/>
                         </MenubarTrigger>
-                        <MenubarContent>
-                            <MenubarItem>
-                                <button onClick={Downloadclick} className='flex items-center'><FiDownload className='text-black mr-2  ' />   Download</button>
+                        <MenubarContent className='bg-secondary-background'>
+                            <MenubarItem className='text-text-primary'>
+                                <button onClick={Downloadclick} className='flex items-center'><FiDownload className='text-text-primary mr-2  ' />   Download</button>
                             </MenubarItem>
-                            <MenubarItem>
-                                <button onClick={Deleteclick} className='flex items-center'><MdDelete className='text-black mr-2 ' /> Delete</button>
+                            <MenubarItem className='text-text-primary'>
+                                <button onClick={Deleteclick} className='flex items-center'><MdDelete className='text-text-primary mr-2 ' /> Delete</button>
                             </MenubarItem>
-                            <MenubarItem className={`${file_type == "Videos" ? "" : "hidden"}`}>
-                                <button onClick={playclick} className='flex items-center '><FaPlay className='text-black mr-2 ' /> Play</button>
+                            <MenubarItem className={`text-text-primary ${file_type == "Videos" ? "" : "hidden"}`}>
+                                <button onClick={playclick} className='flex items-center '><FaPlay className='text-text-primary mr-2 ' /> Play</button>
                             </MenubarItem>
                         </MenubarContent>
                     </MenubarMenu>

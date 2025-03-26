@@ -29,9 +29,14 @@ module.exports = {
     },
     extend: {
       colors :{
+        "primary-border-color" : "#464647",
         "primary-background" : "#1A1D1D",
         "secondary-background" : "#292B2C",
-        "accent" : "#014B77",
+        "accent-primary" : "#014B77",
+        "accent-secondary" : "#035c91",
+        "text-primary" : "white",
+        "text-heading" : "white",
+        "text-secondary" : "#9EA7B0"
       },
       fontFamily: {
         'Guerrilla': ['Protest Guerrilla', 'ui-sans-serif', 'system-ui'],

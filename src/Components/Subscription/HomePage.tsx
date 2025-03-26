@@ -29,29 +29,29 @@ const HomePage = () => {
   }
   return (
     <div className='w-[100vw] h-[100vh] flex justify-center items-center overflow-hidden'>
-      <div className='h-full w-full bg-white flex '>
+      <div className='h-full w-full bg-primary-background flex gap-4 '>
 
-        <div className="h-full 3xl:w-[10%] 2xl:w-[12%] xl:w-[13%] w-[15%] box-content bg-gradient-to-b from-cyan-700 to-gray-400 rounded-r-xl border-r-4 border-white lg:flex justify-center items-center hidden ">
+        <div className="h-full 3xl:w-[10%] 2xl:w-[12%] xl:w-[13%] w-[15%] box-content bg-secondary-background rounded-r-xl lg:flex justify-center items-center hidden ">
           <Leftbar />
         </div>
+      {/* Alag Component */}
+        <div className="bg-primary-background h-full w-full rounded-t-lg flex flex-col">
 
-        <div className="bg-gray-200 h-full 3xl:w-[90%] 2xl:w-[88%] xl:[w-87%] lg:w-[85%] w-full lg:rounded-2xl rounded-t-lg flex flex-col">
+          
+        <Navbar downloadhistory={downloadhistory} changestate={changestate} />
+          
 
-          <nav className="h-[6%] box-border bg-gray-200 border-b-2 border-white lg:rounded-t-xl rounded-t-lg flex flex-row justify-around items-center" >
-            <Navbar downloadhistory={downloadhistory} changestate={changestate} />
-          </nav>
+          <div className="flex h-full rounded-b-2xl py-5 gap-2">
 
-          <div className="flex h-[94%] rounded-b-2xl ">
-
-            <div className=" md:w-[70%] box-border w-full md:border-r-2 border-white flex justify-center items-center ">
+            <div className="w-full flex justify-center items-center ">
               <Routes>
                 <Route path="/Streamvideos" element={<Streamfile />}></Route>
               </Routes>
               {!streamstate && <Contentbar downloadhistory={downloadhistory} changestate={changestate} />}
             </div>
 
-            <div className="w-[30%] md:flex items-center justify-center hidden">
-              <div className="2xl:h-[95%] h-[97%] 2xl:w-11/12 w-[94%] bg-white rounded flex justify-center items-center">
+            <div className="w-[30%] h-full md:flex items-center justify-center hidden">
+              <div className="h-full w-full bg-primary-background rounded-xl flex justify-center items-center border border-primary-border-color">
                 <Rightbar />
               </div>
             </div>

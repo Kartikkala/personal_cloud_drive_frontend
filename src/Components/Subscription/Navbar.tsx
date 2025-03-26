@@ -28,24 +28,24 @@ const Navbar = (props: propinter) => {
     }
   }
   return (
-    <>
+    <nav className="flex p-5 justify-between">
       <span className="flex items-center xl:space-x-4 space-x-2">
-        <FaCloud className="text-4xl" />
-        <span className="2xl:text-2xl text-xl font-bold">KV-CLOUD</span>
+        <FaCloud className="text-4xl" color="white"/>
+        <span className="2xl:text-2xl text-xl font-bold text-text-heading">My Drive</span>
       </span>
 
       <span className="flex items-center xl:space-x-4 space-x-2">
-        <FaCloudUploadAlt onClick={history_onclick} className="md:text-3xl text-2xl" />
+        <FaCloudUploadAlt onClick={history_onclick} className="md:text-3xl text-2xl" color="white" />
 
         <Popover>
           <PopoverTrigger>
-            <CgFormatJustify className=" md:text-3xl text-2xl" />
+            <CgFormatJustify color="white" className="md:text-3xl text-2xl" />
           </PopoverTrigger>
-          <PopoverContent>content for the popover here</PopoverContent>
+          <PopoverContent>Content for the popover here</PopoverContent>
         </Popover>
 
       </span>
-    </>
+    </nav>
   )
 }
 
