@@ -1,12 +1,10 @@
-import { FaFileUpload } from "react-icons/fa";
 import { HiLink } from "react-icons/hi";
 import { GrStorage } from "react-icons/gr";
 import { useState } from "react";
 import { useAppDispatch } from "@/app/Hook";
 import { upload_link } from "../../slice/Link_upload"
 import { fetch_files_fun } from "../../slice/Fetchfiles";
-
-
+import { UploadCloud } from "lucide-react";
 
 const Rightbar = () => {
 
@@ -107,21 +105,33 @@ const Rightbar = () => {
     };
 
     return (
-        <div className="w-11/12 h-[96%] flex flex-col justify-between overflow-y-auto">
+        <div className="w-11/12 h-[96%] flex flex-col justify-between overflow-y-auto bg-secondary-background">
 
-            <div className=" bg-gray-100 flex flex-col xl:justify-normal justify-center ">
+            <div className="bg-secondary-background flex flex-col xl:justify-normal justify-center ">
                 <div className="3xl:h-72 h-64 flex flex-col justify-center items-center rounded">
-                    <FaFileUpload className="h-36 w-full text-gray-800" />
+                
                     <div className="text-xl font-bold text-center pt-2">Add new files</div>
                 </div>
 
                 <form onSubmit={formsumbit_handler} className="flex flex-col items-center pb-8">
-                    <input type="file" disabled={uri_state.length !== 0} onChange={onchange_fileinput} className="border-2 border-gray-300 rounded file:bg-gray-800 file:border-none  file:text-white file:bottom-0 file:p-2 file:xl:text-base file:text-sm xl:text-base lg:text-sm text-xs file:rounded bg-white xl:w-11/12 w-[96%] p-1 font-Josefin lg:file:mr-4 file:mr-2" />
+                <label className="flex flex-col items-center cursor-pointer">
+                    <div className="flex flex-col rounded-xl">
+                    <UploadCloud size={64} color="white"/>
+                        <div className="mx-auto text-white">
+                        Upload
+                        </div>
+                    </div>
+                    <input 
+                        type="file" 
+                        disabled={uri_state.length !== 0} 
+                        onChange={onchange_fileinput} 
+                        className="hidden" />
+                    </label>
 
                     <div className="flex 3xl:my-5 my-3 items-center justify-center w-full">
-                        <div className=" border-t-[1px] border-black xl:w-5/12 w-4/12 h-0"></div>
+                        <div className=" border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
                         <span className="text-2xl font-Josefin px-2">or</span>
-                        <div className="border-t-[1px] border-black xl:w-5/12 w-4/12 h-0"></div>
+                        <div className="border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
                     </div>
 
                     <div className="relative w-full flex justify-center">

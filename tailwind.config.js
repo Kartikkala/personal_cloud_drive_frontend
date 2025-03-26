@@ -28,6 +28,11 @@ module.exports = {
       "3xl": "1800px"
     },
     extend: {
+      colors :{
+        "primary-background" : "#1A1D1D",
+        "secondary-background" : "#292B2C",
+        "accent" : "#014B77",
+      },
       fontFamily: {
         'Guerrilla': ['Protest Guerrilla', 'ui-sans-serif', 'system-ui'],
         'Josefin': ['Josefin Sans', 'ui-sans-serif', 'system-ui'],

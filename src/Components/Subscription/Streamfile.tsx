@@ -66,7 +66,7 @@ const Streamfile = () => {
             }
 
             mediaSource.addEventListener('sourceopen', ()=>{
-                const mimeCodec = 'video/mp4; codecs="avc1.42E01E"';
+                const mimeCodec = 'video/mp4; codecs="avc1.640034"';
                 const sourceBuffer = mediaSource.addSourceBuffer(mimeCodec)
                 sourceBufferRef.current = sourceBuffer;
                 sourceBuffer.mode = 'segments'
