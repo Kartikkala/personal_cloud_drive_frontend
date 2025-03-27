@@ -3,7 +3,7 @@ import { nullset } from '@/slice/Streamslice';
 import { useEffect, useRef } from 'react'
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-import FileList from './FileList';
+import FileList from './Center/FileList';
 import axios from 'axios'
 
 

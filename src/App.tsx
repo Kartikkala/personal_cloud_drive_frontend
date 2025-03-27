@@ -2,8 +2,8 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 import Auth from "./Components/Authentication/Auth"
 import Signin from "./Components/Authentication/Signin"
 import Signup from "./Components/Authentication/Signup";
-import HomePage from "./Components/Subscription/HomePage";
-import useAuth from "./Components/Subscription/Home";
+import HomePage from "./Components/Subscription/Center/HomePage";
+import useAuth from "./Components/Subscription/Center/Home";
 import Signup_otp from "./Components/Authentication/Signup_otp";
 
 

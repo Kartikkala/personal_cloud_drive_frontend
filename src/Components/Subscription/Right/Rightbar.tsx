@@ -1,8 +1,8 @@
 import { HiLink } from "react-icons/hi";
 import { useState } from "react";
 import { useAppDispatch } from "@/app/Hook";
-import { upload_link } from "../../slice/Link_upload"
-import { fetch_files_fun } from "../../slice/Fetchfiles";
+import { upload_link } from "../../../slice/Link_upload"
+import { fetch_files_fun } from "../../../slice/Fetchfiles";
 import { UploadCloud } from "lucide-react";
 
 const Rightbar = () => {

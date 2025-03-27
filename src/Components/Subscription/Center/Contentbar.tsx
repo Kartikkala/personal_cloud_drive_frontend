@@ -9,9 +9,9 @@ import ShowFiles from "./ShowFiles";
 import { useEffect, useState } from "react";
 import Categoriescard from "./Categoriescard";
 import File from './FileList'
-import History from './History'
+import History from '../Top/History'
 import { useAppDispatch, useAppSelector } from "@/app/Hook";
-import { fetch_files_fun } from "../../slice/Fetchfiles";
+import { fetch_files_fun } from "../../../slice/Fetchfiles";
 import { changeState } from "@/slice/Videofiles";
 
 interface mydata {

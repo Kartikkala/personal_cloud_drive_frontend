@@ -1,11 +1,11 @@
-import Navbar from "./Navbar";
-import Leftbar from "./Leftbar";
-import Rightbar from "./Rightbar";
+import Navbar from "../Top/Navbar";
+import Leftbar from "../Left/Leftbar";
+import Rightbar from "../Right/Rightbar";
 
 import Contentbar from "./Contentbar";
 import { useEffect, useState } from "react";
 import { Routes, useNavigate, Route } from "react-router-dom";
-import Streamfile from "./Streamfile";
+import Streamfile from "../Streamfile";
 import { useAppSelector } from "@/app/Hook";
 
 
