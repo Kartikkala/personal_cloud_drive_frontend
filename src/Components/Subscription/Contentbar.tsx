@@ -195,8 +195,8 @@ const Contentbar = (props: getting_props) => {
 
 
     return (
-        <div className="h-full w-full flex justify-center border-primary-border-color border rounded-xl">
-            {!downloadhistory && <div className="w-[94%] h-full overflow-y-hidden ">
+        <div className="h-full w-full flex justify-center border-primary-border-color border rounded-xl overflow-hidden">
+            {!downloadhistory && <div className="w-[94%] h-full overflow-y-hidden">
 
                 {/* Search bar */}
                 <div className={`flex my-6 rounded-lg ${location.pathname == "/home" ? "2xl:mb-[4%]" : "2xl:mb-[1%]]"} `}>
@@ -209,7 +209,9 @@ const Contentbar = (props: getting_props) => {
                     </div>
                 </div>
 
-                {!searchbar && <div className={`border-primary-border-color bg-primary-background rounded-3xl overflow-y-auto ${location.pathname == "/" ? " 2xl:h-[86%] h-[87%]" : " 2xl:h-[90%] h-[91%]"} ${location.pathname == "/" ? "" : " rounded-t-xl"}`}>
+                <h1 className="xl:text-3xl text-2xl font-bold my-7 text-text-heading">All Files</h1>
+
+                {!searchbar && <div className={`border-primary-border-color bg-primary-background rounded-3xl relative overflow-y-auto ${location.pathname == "/" ? " 2xl:h-[86%] h-[87%]" : " 2xl:h-[90%] h-[91%]"} ${location.pathname == "/" ? "" : " rounded-t-xl"}`}>
                     <Routes>
                         <Route path="/category/Videos" element={<ShowFiles data={videofiles} />}></Route>
                         <Route path="/category/Audios" element={<ShowFiles data={audiofiles} />}></Route>
@@ -219,13 +221,12 @@ const Contentbar = (props: getting_props) => {
                     </Routes>
 
                     {location.pathname == "/" && <div>
-                        <div className="flex gap-3 justify-items-center">
+                        <div className="flex gap-3 justify-items-center sticky">
                             {elements.map((value) => {
                                 return <Categoriescard key={String(value.tag)} item={value} />;
                             })}
                         </div>
 
-                        <h1 className="xl:text-3xl text-2xl font-bold my-7 text-text-heading">All Files</h1>
                         <div className="flex justify-between lg:px-4 px-2 pb-2 font-semibold md:text-base text-sm">
                             <div className="w-[45%] text-text-heading">Name</div>
                             <div className="w-[26%] text-text-heading">Size</div>

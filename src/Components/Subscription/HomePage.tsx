@@ -28,10 +28,10 @@ const HomePage = () => {
     setdownloadhistory(value);
   }
   return (
-    <div className='w-[100vw] h-[100vh] flex justify-center items-center overflow-hidden'>
-      <div className='h-full w-full bg-primary-background flex gap-4 '>
+    <div className='w-[100vw] h-[100vh] flex justify-center items-center'>
+      <div className='h-full w-full bg-primary-background flex'>
 
-        <div className="h-full 3xl:w-[10%] 2xl:w-[12%] xl:w-[13%] w-[15%] box-content bg-secondary-background rounded-r-xl lg:flex justify-center items-center hidden ">
+        <div className="bg-secondary-background rounded-r-xl lg:flex justify-center items-center hidden md:w-1/6">
           <Leftbar />
         </div>
       {/* Alag Component */}
@@ -41,9 +41,9 @@ const HomePage = () => {
         <Navbar downloadhistory={downloadhistory} changestate={changestate} />
           
 
-          <div className="flex h-full rounded-b-2xl py-5 gap-2">
-
-            <div className="w-full flex justify-center items-center ">
+          <div className="flex h-full rounded-b-2xl p-5 gap-2">
+        {/* One seperate component */}
+            <div className="w-full flex justify-center items-center">
               <Routes>
                 <Route path="/Streamvideos" element={<Streamfile />}></Route>
               </Routes>

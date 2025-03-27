@@ -1,5 +1,4 @@
 import { HiLink } from "react-icons/hi";
-import { GrStorage } from "react-icons/gr";
 import { useState } from "react";
 import { useAppDispatch } from "@/app/Hook";
 import { upload_link } from "../../slice/Link_upload"
@@ -105,67 +104,47 @@ const Rightbar = () => {
     };
 
     return (
-        <div className="w-11/12 h-[96%] flex flex-col justify-between overflow-y-auto bg-primary-background">
+        <div className="w-11/12 h-[96%] flex flex-col justify-between bg-primary-background">
 
-            <div className="bg-primary-background flex flex-col xl:justify-normal justify-center ">
+            <div className="bg-primary-background flex flex-col h-full gap-10">
                     <div className="text-text-heading text-xl font-bold text-center pt-2">Add new files</div>
 
-                <form onSubmit={formsumbit_handler} className="flex flex-col items-center pb-8">
-                    {/* Upload file button */}
-                <label className="flex flex-col items-center cursor-pointer bg-secondary-background w-full rounded-xl">
-                    <div className="flex flex-col rounded-xl">
-                    <UploadCloud size={64} color="white"/>
-                        <div className="mx-auto text-text-primary">
-                        Upload
-                        </div>
-                    </div>
-                    <input 
-                        type="file" 
-                        disabled={uri_state.length !== 0} 
-                        onChange={onchange_fileinput} 
-                        className="hidden" />
-                    </label>
-                    {/* End of upload file button */}
-                    <div className="flex 3xl:my-5 my-3 items-center justify-center w-full">
-                        <div className=" border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
-                        <span className="text-2xl font-Josefin px-2 text-text-primary">or</span>
-                        <div className="border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
-                    </div>
+                        <form onSubmit={formsumbit_handler} className="flex flex-col items-center">
+                            {/* Upload file button */}
+                        <label className="flex flex-col items-center cursor-pointer bg-secondary-background w-full rounded-xl p-4">
+                            <div className="flex flex-col rounded-xl">
+                            <UploadCloud size={64} color="white"/>
+                                <div className="mx-auto text-text-primary">
+                                Upload
+                                </div>
+                            </div>
+                            <input 
+                                type="file" 
+                                disabled={uri_state.length !== 0} 
+                                onChange={onchange_fileinput} 
+                                className="hidden" />
+                            </label>
+                            {/* End of upload file button */}
+                            <div className="flex 3xl:my-5 my-3 items-center justify-center w-full">
+                                <div className=" border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
+                                <span className="text-2xl font-Josefin px-2 text-text-primary">or</span>
+                                <div className="border-t-[1px] xl:w-5/12 w-4/12 h-0"></div>
+                            </div>
 
-                    <div className="relative w-full flex justify-center">
-                        <label htmlFor="link" className="xl:text-2xl text-xl absolute bottom-4 xl:left-8 left-3"><HiLink color="#9EA7B0"/></label>
-                        <input type="text" disabled={file_state != ""} onChange={onchange_uriinput} value={uri_state} className="border bg-primary-background focus:border-primary-border-color outline-none border-primary-border-color p-3 xl:pl-14 pl-9 xl:w-11/12 w-[96%] font-Josefin rounded-xl text-text-secondary xl:text-base text-sm" placeholder="Add upload link here" name="link" id="link" />
-                    </div>
+                            <div className="relative w-full flex justify-center">
+                                <label htmlFor="link" className="xl:text-2xl text-xl absolute bottom-4 xl:left-8 left-3"><HiLink color="#9EA7B0"/></label>
+                                <input type="text" disabled={file_state != ""} onChange={onchange_uriinput} value={uri_state} className="border bg-primary-background focus:border-primary-border-color focus:bg-primary-background hover:bg-primary-background outline-none border-primary-border-color p-3 xl:pl-14 pl-9 xl:w-11/12 w-[96%] font-Josefin rounded-xl text-text-secondary xl:text-base text-sm" placeholder="Add upload link here" name="link" id="link" />
+                            </div>
 
-                    <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mt-2">{linkvalidation}</div>
+                            <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mt-2">{linkvalidation}</div>
 
-                    <button disabled={disable} className="bg-accent-primary hover:bg-accent-secondary text-text-primary font-Josefin font-extrabold  py-3 px-4 rounded xl:mt-5 mt-6 w-10/12 duration-200">
-                        Add File
-                    </button>
-                </form>
+                            <button disabled={disable} className="bg-accent-primary hover:bg-accent-secondary text-text-primary font-Josefin font-extrabold  py-3 px-4 w-10/12 duration-200 rounded-xl">
+                                Add File
+                            </button>
+                        </form>
+                        
 
             </div>
-            {/* progress bar */}
-            <div className="bg-cyan-700 rounded-lg text-lg] ">
-
-                <div className="3xl:p-2 xl:p-1 p-2 flex flex-col items-center space-y-1">
-                    <div className="flex justify-center items-center text-black rounded-lg 3xl:p-2 p-1 w-full">
-                        <GrStorage className="font-bold mr-2 rounded text-text-primary" />
-                        <div className="text-center font-bold xl:text-2xl text-xl">Your Storage</div>
-                    </div>
-
-                    <div className="w-28 h-28 relative border-[2px] border-black rounded-full">
-                        {/* <IoAdd className="absolute -left-[2.85rem] -top-[2.80rem] z-30 h-48 w-48 text-white" /> */}
-                        <div className="absolute z-40 text-xl left-[1.85rem] top-9 font-bold">75%</div>
-                        <div className="w-[88%] h-[88%] bg-blue-500 rounded-full absolute z-10 left-[0.35rem] top-[0.37rem] box-border border-[2px] border-black"></div>
-                        <progress className="rounded-full custom-progress bg-gray-200 w-full h-full overflow-hidden  box-border" value="75" max="100">
-                        </progress>
-                    </div>
-
-                    <p className="pt-1 ml-2 font-medium xl:text-lg lg:text-base text-sm"><span className="text-white">75gb</span> is used out of <span className="text-white">100gb</span></p>
-                </div>
-            </div>
-
         </div>
     )
 }

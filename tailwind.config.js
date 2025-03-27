@@ -29,6 +29,7 @@ module.exports = {
     },
     extend: {
       colors :{
+        "autofill" : "transparent",
         "primary-border-color" : "#464647",
         "primary-background" : "#1A1D1D",
         "secondary-background" : "#292B2C",
@@ -58,5 +59,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"),
+    require("autoprefixer")
+  ],
 }

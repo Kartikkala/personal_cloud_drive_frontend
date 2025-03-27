@@ -37,12 +37,6 @@ const Navbar = (props: propinter) => {
       <span className="flex items-center xl:space-x-4 space-x-2">
         <FaCloudUploadAlt onClick={history_onclick} className="md:text-3xl text-2xl" color="white" />
 
-        <Popover>
-          <PopoverTrigger>
-            <CgFormatJustify color="white" className="md:text-3xl text-2xl" />
-          </PopoverTrigger>
-          <PopoverContent>Content for the popover here</PopoverContent>
-        </Popover>
 
       </span>
     </nav>
