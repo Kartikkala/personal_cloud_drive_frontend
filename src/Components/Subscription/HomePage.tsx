@@ -35,13 +35,13 @@ const HomePage = () => {
           <Leftbar />
         </div>
       {/* Alag Component */}
-        <div className="bg-primary-background h-full w-full rounded-t-lg flex flex-col">
+        <div className="bg-primary-background w-full rounded-t-lg flex flex-col">
 
           
         <Navbar downloadhistory={downloadhistory} changestate={changestate} />
-          
 
-          <div className="flex h-full rounded-b-2xl p-5 gap-2">
+          {/* Changes to prevent overflowing outside the main div */}
+          <div className="flex 2xl:h-[92%] h-[90%] rounded-b-2xl p-5 gap-2">
         {/* One seperate component */}
             <div className="w-full flex justify-center items-center">
               <Routes>

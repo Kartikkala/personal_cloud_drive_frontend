@@ -87,7 +87,7 @@ const UserInfo = ()=>{
                                         <AvatarImage src="https://github.com/shadcn.png" />
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
-                                    <div className="text-lg font-semibold text-white">Vijay Rawat</div>
+                                    <div className="text-lg font-semibold text-white">Kartik Kala</div>
 
 
                                     <Tabs defaultValue="User Info" className="w-full mt-4">

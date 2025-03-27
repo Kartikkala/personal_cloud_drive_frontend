@@ -109,7 +109,7 @@ const FileList = (props: myprops) => {
 
     return (
 
-        <div className='h-12 hover:bg-secondary-background bg-primary-background border border-primary-border-color rounded-3xl flex justify-between items-center font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs text-text-primary'>
+        <div className='min-h-12 hover:bg-secondary-background bg-primary-background border border-primary-border-color rounded-3xl flex justify-between items-center font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs text-text-primary'>
             <div className="flex w-[45%] items-center">
                 {Selectedicon && <Selectedicon className="sm:text-2xl text-xl xl:pr-2 text-blue-500" />}
                 <div className="">{fileobj.name}</div>
