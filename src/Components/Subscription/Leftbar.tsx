@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import UserInfo from "./UserInfo";
+import UserInfo from "./UserInfoKartik";
 
 
 const Leftbar = () => {
