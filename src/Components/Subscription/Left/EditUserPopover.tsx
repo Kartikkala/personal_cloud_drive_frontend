@@ -2,7 +2,6 @@ import { Popover } from "radix-ui";
 import { useState } from "react";
 import AvatarCustom from "./AvatarCustom";
 import EditUserDialog from "./EditUserDialog";
-import { PopoverClose } from "@radix-ui/react-popover";
 
 const EditUserPopover  = ()=>{
 

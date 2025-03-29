@@ -4,13 +4,15 @@ import { MdVisibility } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { MdVisibilityOff } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/slice/UserInfo";
 
 const Signin = () => {
 
     const host = "http://localhost:5000/api/login";
     const navigate = useNavigate();
     const [signin_servererror, setsignin_servererror] = useState<null | string>(null);
-
+    const dispatch = useDispatch()
     const [signincred, setsignincred] = useState<{ signin_email: string, signin_password: string, email_error: string, password_error: string }>({ signin_email: "", signin_password: "", email_error: "", password_error: "" });
     const [signin_visibility, setsignin_visibility] = useState<string>("password");
 
@@ -64,6 +66,11 @@ const Signin = () => {
         const json = await user_signin.json();
         if (json.success == true) {
             localStorage.setItem('token', json.token);
+            dispatch(setUser({
+                name : json.name,
+                email : json.email,
+                admin : json.admin
+            }))
             navigate('/');
         }
         else {

@@ -4,6 +4,7 @@ import FetchfilesReducers from '../slice/Fetchfiles'
 import StateupdateReducers from '../slice/StatusUpdate'
 import StreamsliceReducers from '../slice/Streamslice'
 import VideofileReducers from '../slice/Videofiles'
+import UserReducers from '../slice/UserInfo'
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
         fetch_files: FetchfilesReducers,
         status_update: StateupdateReducers,
         Stream_slice: StreamsliceReducers,
-        Video_file: VideofileReducers
+        Video_file: VideofileReducers,
+        user : UserReducers
     },
 })
 

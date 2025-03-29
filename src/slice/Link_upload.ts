@@ -22,10 +22,12 @@ const initialState: InitialType = {
 // thunk function:
 export const upload_link = createAsyncThunk("aria/downloadFileServer", async (uri: string) => {
     console.log("upload_link function working");
+    const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/aria/downloadFileServer", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization" : token as string
         },
         body: JSON.stringify({uri})
     })

@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import UserInfo from "./UserInfoKartik";
+import ControlPanel from "./ControlPanel";
+import Button from "./Button";
 
 
 const Leftbar = () => {
@@ -13,9 +15,8 @@ const Leftbar = () => {
     return (
         <div className="h-[94%] w-11/12 flex flex-col justify-between items-center">
             <UserInfo/>
-            <button onClick={signout_handler} className="bg-accent-primary hover:bg-accent-secondary duration-200 text-text-primary font-Josefin py-3 px-3 rounded-xl mb-2 w-11/12">
-                Sign out
-            </button>
+            <ControlPanel/>
+            <Button onClickHandler={signout_handler} buttonContent={"Signout"}/>
         </div>
     )
 }

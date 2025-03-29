@@ -4,7 +4,7 @@ const UserInfo = ()=>{
     
     return (
         // Main parent
-    <div className="h-full w-full flex flex-col gap-2 relative">
+    <div className="w-full flex flex-col gap-2 relative">
         <EditUserPopover/>
     </div>)
 }
