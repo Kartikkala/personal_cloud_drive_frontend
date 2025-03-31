@@ -19,6 +19,7 @@ import { useAppDispatch } from '@/app/Hook';
 import { fetch_files_fun } from '@/slice/Fetchfiles';
 import { changestate } from '@/slice/Streamslice';
 import { useNavigate } from 'react-router-dom';
+import { shortenFilename } from '../Right/utils';
 
 interface mydata {
     size: number,
@@ -118,22 +119,22 @@ const FileList = (props: myprops) => {
     return (
 
         <div className='min-h-12 hover:bg-secondary-background bg-primary-background border border-primary-border-color rounded-3xl flex justify-between items-center font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs text-text-primary'>
-            <div className="flex w-[45%] items-center">
-                {Selectedicon && <Selectedicon className="sm:text-2xl text-xl xl:pr-2 text-blue-500" />}
-                <div className="">{fileobj.name}</div>
-            </div>
-
-            <div className="w-[26%]">{fileobj.size.toFixed(2)} MB</div>
-            <div className="w-[26%] ">{fileobj.birthtime.split('T')[0]}</div>
-            <div className="w-[3%] h-full hover:cursor-pointer border-blue-500 flex justify-center ">
-
-                
+            
+            
+            <div className="w-full h-full hover:cursor-pointer border-blue-500 flex justify-center ">
                 <Menubar className="w-full h-full">
                     <MenubarMenu>
-                        <MenubarTrigger className='h-full w-full flex justify-center focus:bg-secondary-background hover:bg-secondary-background'>
-                            <HiDotsVertical className=' focus:text-text-primary text-text-primary'/>
+                        <MenubarTrigger className='h-full w-full justify-between focus:bg-secondary-background hover:bg-secondary-background'>
+                            <div className="flex w-full items-center">
+                            {Selectedicon && <Selectedicon className="sm:text-2xl text-xl xl:pr-2 text-blue-400" />}
+                            <div className="text-text-primary">{shortenFilename(fileobj.name, 20, 8)}</div>
+                            </div>
+
+                            <div className="w-[40%] text-text-primary">{fileobj.size.toFixed(2)} MB</div>
+                            <div className="w-full text-text-primary">{fileobj.birthtime.split('T')[0]}</div>
+                            <HiDotsVertical className=' focus:text-text-primary text-text-primary w-[16%]'/>
                         </MenubarTrigger>
-                        <MenubarContent className='bg-secondary-background'>
+                        <MenubarContent className='bg-secondary-background' align='end' alignOffset={-100}>
                             <MenubarItem className='text-text-primary'>
                                 <button onClick={Downloadclick} className='flex items-center'><FiDownload className='text-text-primary mr-2  ' />   Download</button>
                             </MenubarItem>
