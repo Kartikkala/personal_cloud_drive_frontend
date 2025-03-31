@@ -1,10 +1,12 @@
 import { HiLink } from "react-icons/hi";
-import { useState } from "react";
-import { useAppDispatch } from "@/app/Hook";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/app/Hook";
 import { upload_link } from "../../../slice/Link_upload"
+import { updateDownloads } from "../../../slice/ServerDownloads"
 import { fetch_files_fun } from "../../../slice/Fetchfiles";
 import { UploadCloud } from "lucide-react";
 import DownloadStatusSection from "./DownloadStatusSection";
+import socket from "../Socket";
 
 const Rightbar = () => {
 
@@ -12,13 +14,33 @@ const Rightbar = () => {
 
     const [file_state, setfile_state] = useState<File | string>("");
     const [uri_state, seturi_state] = useState<string>("");
-    const [linkvalidation, setlinkvalidation] = useState<string | null>(null);
     const [disable, setdisable] = useState<boolean>(true);
+    const [linkErrorStatus, setLinkErrorStatus] = useState(false)
+    const [LinkMessage, setLinkMessage] = useState<string | null>(null);
 
-    const normalDownloadPattern = /https?:\/\/[^\s\/$.?#].[^\s]*\/[^\s]*(download|\.zip|\.exe|\.pdf|\.mp3|\.mp4|\.jpg|\.jpeg|\.png|\.gif|\.tar\.gz|\.rar|\.7z|\.iso|\.docx?|\.xlsx?|\.pptx?|\.txt|\.apk|\.dmg|\.bin|\.msi|\.deb|\.rpm|\.pkg|\.avi|\.mov|\.wmv|\.flv|\.mkv|\.webm|\.ogg|\.wav|\.aac)(\?[^\s]*)?(?!.*\.torrent)/gi;
+    const downloads = useAppSelector((state)=>state.serverDownloads.downloads) || []
+    let download = undefined
+    Array.isArray(downloads) ? download = downloads[downloads.length -1] : null
+    if(download && download.status === 'error'){
+        setLinkMessage(download.errorMessage)
+    }
 
+    const linkResult = useAppSelector((state)=>state.link_upload.data)
 
-    const torrentAndMagnetPattern = /(https?:\/\/[^\s\/$.?#].[^\s]*\/[^\s]*\.torrent(\?[^\s]*)?|magnet:\?xt=urn:btih:[a-zA-Z0-9]{40,}(\&[^\s]*)?)/gi;
+    useEffect(() => {
+        if (linkResult) {
+            setLinkErrorStatus(linkResult.error)
+          setLinkMessage(
+            `${linkResult.error ? "Error downloading file." : ""} ${
+              linkResult.sizeLimitExceeded ? "Size limit exceeded" : ""
+            } ${!linkResult.valid ? "Invalid link!" : ""}`
+          );
+        }
+      }, [linkResult]);
+
+    socket.on(`statusUpdate`, (data)=>{
+        dispatch(updateDownloads(data))
+    })
 
     const onchange_fileinput = (event: React.ChangeEvent<HTMLInputElement>) => {
 
@@ -34,20 +56,14 @@ const Rightbar = () => {
     }
 
     const onchange_uriinput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // const dispatch = useAppDispatch();
+        setLinkMessage(null)
 
         seturi_state(e.target.value);
-        if (!normalDownloadPattern.test(e.target.value) && !torrentAndMagnetPattern.test(e.target.value) && e.target.value.length != 0) {
-            setlinkvalidation("Invalid Link format");
-            setdisable(true);
+        if(e.target.value.length === 0)
+        {
+            setdisable(true)
         }
-        else if (e.target.value.length == 0) {
-            setlinkvalidation(null);
-        }
-        else {
-            setlinkvalidation(null);
-            setdisable(false);
-        }
+        setdisable(false);
     }
 
     const inputFileUpload = async () => {
@@ -87,19 +103,13 @@ const Rightbar = () => {
     const formsumbit_handler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (uri_state.length != 0) {
-            if (normalDownloadPattern.test(uri_state)) {
-                dispatch(upload_link(uri_state));
-                // socket.on('statusUpdate', (value: ArrayOfObjects) => {
-                //     const val = value[0];
-                //     dispatch(changestate(val));
-                //     if (value[0].totalLength == value[0].uploadLength) {
-                //         dispatch(fetch_files_fun());
-                //     }
-                // })
-            }
+            setLinkErrorStatus(false)
+            setLinkMessage("Downloading from link...")
+            dispatch(upload_link(uri_state));
+            
 
         } else {
-            inputFileUpload();
+            await inputFileUpload();
             dispatch(fetch_files_fun());
         }
     };
@@ -137,7 +147,7 @@ const Rightbar = () => {
                                 <input type="text" disabled={file_state != ""} onChange={onchange_uriinput} value={uri_state} className="border bg-primary-background focus:border-primary-border-color focus:bg-primary-background hover:bg-primary-background outline-none border-primary-border-color p-3 xl:pl-14 pl-9 xl:w-11/12 w-[96%] font-Josefin rounded-xl text-text-secondary xl:text-base text-sm" placeholder="Add upload link here" name="link" id="link" />
                             </div>
 
-                            <div className="text-red-500 h-5 font-Josefin md:text-sm sm:text-xs text-sm mt-2">{linkvalidation}</div>
+                            <div className={`${linkErrorStatus?"text-red-500":"text-text-primary"} h-5 font-Josefin md:text-sm sm:text-xs text-sm mt-2`}>{LinkMessage}</div>
 
                             <button disabled={disable} className="bg-accent-primary hover:bg-accent-secondary text-text-primary font-Josefin font-extrabold  py-3 px-4 w-10/12 duration-200 rounded-xl">
                                 Add File

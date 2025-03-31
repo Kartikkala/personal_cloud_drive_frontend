@@ -12,4 +12,8 @@ const socket: Socket = io(END, {
     }
 });
 
+socket.on('connect', ()=>{
+    console.log("Socket connected!")
+})
+
 export default socket;

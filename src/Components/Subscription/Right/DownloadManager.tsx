@@ -1,35 +1,71 @@
-import { useState } from "react";
 import * as Menubar from "@radix-ui/react-menubar";
 import { Progress } from "radix-ui";
 import { MoreVertical } from "lucide-react";
-import socket from "../Socket";
 import { useAppSelector } from "@/app/Hook";
 
-const downloadsData = [
-  { id: 1, name: "File1.mp4", status: "Downloading", absValue: 20, absTotalValue : 100 },
-  { id: 2, name: "Document.pdf", status: "Paused" , absValue: 20, absTotalValue : 100},
-  { id: 3, name: "Music.mp3", status: "Downloading" , absValue: 20, absTotalValue : 100},
-];
-
 export default function DownloadManager() {
-  const [downloads, setDownloads] = useState(downloadsData);
-  const user = useAppSelector((state)=>state.user.user)
-  if(user !== null){
-    socket.on(`statusUpdate_${user.email}`, (downloadStatus)=>{
-      console.log("Event fired!", downloadStatus)
+
+  const downloads = useAppSelector((state)=>state.serverDownloads.downloads) || []
+
+  const cancelDownload = async (gid)=>{
+    const token: string | null = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5000/api/aria/cancelDownload/${gid}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization" : token as string
+        }
     })
+    const json = await response.json();
+    return json;
   }
 
-  const updateStatus = (id, newStatus) => {
-    setDownloads((prev) =>
-      prev.map((dl) => (dl.id === id ? { ...dl, status: newStatus } : dl))
-    );
-  };
+  const pauseDownload = async (gid)=>{
+    const token: string | null = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5000/api/aria/pauseDownload/${gid}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization" : token as string
+        }
+    })
+    const json = await response.json();
+    return json;
+  }
+  const resumeDownload = async (gid)=>{
+    const token: string | null = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5000/api/aria/resumeDownload/${gid}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization" : token as string
+        }
+    })
+    const json = await response.json();
+    return json;
+  }
+
+  function formatBytes(bytes: number, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(decimals))} ${sizes[i]}`;
+  }
+  
 
   return (
     <div className="space-y-2 w-full p-2">
-      {downloads.map((download) => (
-        <Menubar.Root key={download.id}>
+      {downloads.map((download) => {
+        if(!download.file)
+        {
+          return;
+        }
+        const completedLength = Number(download.completedLength)
+        const totalLength = Number(download.totalLength)
+
+        return (
+        <Menubar.Root key={download.gid}>
           <Menubar.Menu>
             <Menubar.Trigger asChild>
               {/* Entire Download panel here */}
@@ -37,14 +73,14 @@ export default function DownloadManager() {
                 {/* Downlad name and status */}
 
                 <div className="flex flex-col w-full">
-                  <p className="text-sm">{download.name}</p>
+                  <p className="text-sm">{download.file}</p>
                   <div className="flex items-center justify-between 2xl:w-[90%] w-full">
                     <p className="text-xs text-text-secondary">{download.status}</p>
-                    <div className="flex items-center gap-2 2xl:w-[60%]">
+                    <div className="flex items-center gap-2 2xl:w-[80%]">
                       {/* All this progress inside 3 dot menu in smaller devices*/}
-                      <p className="text-xs text-text-primary">100gb/125gb</p>
-                      <Progress.Root max={100} value={(download.absValue/download.absTotalValue) * 100} className="hidden 2xl:block relative w-full h-2 bg-secondary-background rounded overflow-hidden">
-                        <Progress.Indicator style={{ width: `${(download.absValue/download.absTotalValue) * 100}%` }} className="h-full bg-accent-primary duration-1000"/>
+                      <p className="text-xs text-text-primary whitespace-nowrap">{`${formatBytes(completedLength)} / ${formatBytes(totalLength)}`}</p>
+                      <Progress.Root max={100} value={totalLength !== 0 ? (Number(completedLength)/Number(totalLength)) * 100 : 0} className="hidden 2xl:block relative w-full h-2 bg-secondary-background rounded overflow-hidden">
+                        <Progress.Indicator style={{ width: `${totalLength !== 0 ? (Number(completedLength)/Number(totalLength)) * 100 : 0}%` }} className="h-full bg-accent-primary duration-1000"/>
                       </Progress.Root>
                     </div>
                   </div>
@@ -57,25 +93,28 @@ export default function DownloadManager() {
             </Menubar.Trigger>
             <Menubar.Portal>
               <Menubar.Content side="bottom" align="end" className="bg-primary-background text-text-primary rounded-xl shadow-lg p-2 transition-transform duration-200 ease-out data-[state=open]:animate-fade-in-scale">
-                {download.status === "Downloading" && (
+                {download.status === "active" && (
                   <Menubar.Item
                     className="p-2 hover:bg-secondary-background cursor-pointer rounded-xl"
-                    onClick={() => updateStatus(download.id, "Paused")}
+                    onClick={() => pauseDownload(download.gid)}
                   >
                     Pause
                   </Menubar.Item>
                 )}
-                {download.status === "Paused" && (
+                {download.status === "paused" && (
                   <Menubar.Item
                     className="p-2 hover:bg-secondary-background cursor-pointer rounded-xl"
-                    onClick={() => updateStatus(download.id, "Downloading")}
+                    onClick={() => resumeDownload(download.gid)}
                   >
                     Resume
                   </Menubar.Item>
                 )}
                 <Menubar.Item
                   className="p-2 hover:bg-red-600 cursor-pointer rounded-xl"
-                  onClick={() => setDownloads((prev) => prev.filter((dl) => dl.id !== download.id))}
+                  onClick={() => {
+                    cancelDownload(download.gid)
+                    console.log("Cancel clicked!")
+                  }}
                 >
                   Cancel
                 </Menubar.Item>
@@ -83,7 +122,7 @@ export default function DownloadManager() {
             </Menubar.Portal>
           </Menubar.Menu>
         </Menubar.Root>
-      ))}
+  )})}
     </div>
   );
 }

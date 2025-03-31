@@ -7,7 +7,7 @@ const DownloadStatusSection = ()=>{
                 Downloads
             </h1>
             <div className="flex w-full h-full rounded-xl overflow-y-auto  border-primary-border-color border">
-                <DownloadStatus name={"Playerunkown's battlegrounds : PUBG"} valueAbs={1925} valueAbsMax={6190}/>
+                <DownloadStatus/>
             </div>
         </div>
     )

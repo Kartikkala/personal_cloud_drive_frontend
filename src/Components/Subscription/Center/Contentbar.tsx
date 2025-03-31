@@ -120,43 +120,47 @@ const Contentbar = (props: getting_props) => {
         const files_copy: myda[] = [];
 
         // files.forEach((file) => {
-        for (let i = 0; i < files.length; i++) {
-            const file = Object.assign({}, files[i]);
+        if(Array.isArray(files))
+        {
+            for (let i = 0; i < files.length; i++) {
+                const file = Object.assign({}, files[i]);
+    
+                file.size = file.size / 1048576;
+    
+                if (file.name.endsWith(".mp4")) {
+                    videos.push(file);
+                    sizeobj.videofilesize += file.size;
+                    const file_copy: myda = { ...file, category: "Videos" };
+                    files_copy.push(file_copy);
+    
+                }
+                else if (file.name.endsWith(".mp3")) {
+                    audios.push(file);
+                    sizeobj.audiofilesize += file.size;
+                    const file_copy: myda = { ...file, category: "Audios" };
+                    files_copy.push(file_copy);
+                }
+                else if (file.name.endsWith("jpg") || file.name.endsWith(".png")) {
+                    images.push(file);
+                    sizeobj.imagefilesize += file.size;
+                    const file_copy: myda = { ...file, category: "Images" };
+                    files_copy.push(file_copy);
+                }
+                else if (file.name.endsWith(".pdf") || file.name.endsWith(".docx")) {
+                    documents.push(file);
+                    sizeobj.documentfilesize += file.size;
+                    const file_copy: myda = { ...file, category: "Documents" };
+                    files_copy.push(file_copy);
+                }
+                else {
+                    more.push(file);
+                    sizeobj.morefilesize += file.size;
+                    const file_copy: myda = { ...file, category: "More" };
+                    files_copy.push(file_copy);
+                }
+                // })
+            }
 
-            file.size = file.size / 1048576;
-
-            if (file.name.endsWith(".mp4")) {
-                videos.push(file);
-                sizeobj.videofilesize += file.size;
-                const file_copy: myda = { ...file, category: "Videos" };
-                files_copy.push(file_copy);
-
-            }
-            else if (file.name.endsWith(".mp3")) {
-                audios.push(file);
-                sizeobj.audiofilesize += file.size;
-                const file_copy: myda = { ...file, category: "Audios" };
-                files_copy.push(file_copy);
-            }
-            else if (file.name.endsWith("jpg") || file.name.endsWith(".png")) {
-                images.push(file);
-                sizeobj.imagefilesize += file.size;
-                const file_copy: myda = { ...file, category: "Images" };
-                files_copy.push(file_copy);
-            }
-            else if (file.name.endsWith(".pdf") || file.name.endsWith(".docx")) {
-                documents.push(file);
-                sizeobj.documentfilesize += file.size;
-                const file_copy: myda = { ...file, category: "Documents" };
-                files_copy.push(file_copy);
-            }
-            else {
-                more.push(file);
-                sizeobj.morefilesize += file.size;
-                const file_copy: myda = { ...file, category: "More" };
-                files_copy.push(file_copy);
-            }
-            // })
         }
 
         files_copy.sort((a, b) => new Date(b.birthtime).getTime() - new Date(a.birthtime).getTime());
@@ -165,18 +169,18 @@ const Contentbar = (props: getting_props) => {
         setlatest_files(latest_arr);
 
         setvideofiles(videos);
-        dispatch(changeState(videos));
+        // dispatch(changeState(videos));
         setaudiofiles(audios);
         setimagefiles(images);
         setdocumentfiles(documents);
         setmorefiles(more);
         setfilesize(sizeobj);
 
-    }, [files])
+    }, [files, dispatch])
 
-    useEffect(() => {
-        setelements(arra);
-    }, [filesize]);
+    // useEffect(() => {
+    //     setelements(arra);
+    // }, [filesize]);
 
     const [searchbar, setsearchbar] = useState<string>("");
     const [match_array, setmatch_array] = useState<myda[]>([]);

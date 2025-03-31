@@ -28,7 +28,8 @@ const initialState: InitialType = {
 }
 
 // thunk function:
-export const fetch_files_fun = createAsyncThunk("aria/downloadFileServer", async () => {
+export const fetch_files_fun = createAsyncThunk("fetchFiles", async () => {
+    console.log('Fetch files called!')
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/fs/ls", {
         method: "POST",
@@ -39,24 +40,25 @@ export const fetch_files_fun = createAsyncThunk("aria/downloadFileServer", async
         body: JSON.stringify({ targetPath: "/" })
     })
     const json = await response.json();
-    return json;
+    console.log(json)
+    return json || [];
 })
 
 const Fetchfiles_slice = createSlice({
     name: "fetch_files",
     initialState,
     reducers: {
+        
     },
     extraReducers: (builder) => {
         builder.addCase(fetch_files_fun.pending, (state) => {
-            state.status = "pending";
+            return {...state, status : "pending"}
         })
-        builder.addCase(fetch_files_fun.fulfilled, (state, action: PayloadAction<ResponseType>) => {
-            state.status = "fullfilled";
-            state.files = action.payload.content;
+        .addCase(fetch_files_fun.fulfilled, (state, action: PayloadAction<ResponseType>) => {
+            return {...state, status : "fulfilled", files : action.payload.content}
         })
-        builder.addCase(fetch_files_fun.rejected, (state) => {
-            state.status = "rejected";
+        .addCase(fetch_files_fun.rejected, (state) => {
+            return {...state, status : "rejected"}
         })
     }
 })

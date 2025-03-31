@@ -62,12 +62,13 @@ const FileList = (props: myprops) => {
     const Downloadclick = async () => {
 
         const token: string | null = localStorage.getItem('token');
-        const response = await fetch('http:/localhost:5000//api/fs/downloadFIleClient', {
+        const response = await fetch('http://localhost:5000/api/fs/downloadFileClient', {
+            method : "POST",
             headers: {
                 "Authorization": token as string,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ filePath: `/${fileobj.name}` })
+            body: JSON.stringify({ targetPath: `/${fileobj.name}` })
         })
         if (response.ok) {
             const blob = await response.blob();
@@ -87,16 +88,23 @@ const FileList = (props: myprops) => {
     const Deleteclick = async () => {
         const token: string | null = localStorage.getItem('token');
         const response = await fetch('http://localhost:5000/api/fs/delete', {
+            method : "POST",
             headers: {
                 "Authorization": token as string,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ filePath: `/${fileobj.name}` })
+            body: JSON.stringify({ targetPath: `/${fileobj.name}` })
         })
         const json = await response.json();
-        if (json.deleted == true) {
-            dispatch(fetch_files_fun());
+        if(Array.isArray(json))
+        {
+            const deleted = json.pop().deleted
+            if(deleted)
+            {
+                //Do something
+            }
         }
+        dispatch(fetch_files_fun());
     }
 
     const playclick = () => {

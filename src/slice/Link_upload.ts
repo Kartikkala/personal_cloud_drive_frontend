@@ -1,9 +1,10 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface ResponseType {
-    guid: string | null,
-    active: boolean | null,
-    waiting: boolean | null,
+    guid: string | undefined,
+    valid : boolean,
+    sizeLimitExceeded : boolean,
+    error : boolean
 }
 interface InitialType {
     data: ResponseType | null,
@@ -12,16 +13,16 @@ interface InitialType {
 
 const initialState: InitialType = {
     data: {
-        guid: null,
-        active: null,
-        waiting: null,
+        guid: undefined,
+        valid: true,
+        sizeLimitExceeded: false,
+        error : false
     },
     status: null
 }
 
 // thunk function:
 export const upload_link = createAsyncThunk("aria/downloadFileServer", async (uri: string) => {
-    console.log("upload_link function working");
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/aria/downloadFileServer", {
         method: "POST",
@@ -43,14 +44,13 @@ const Linkupload_slice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(upload_link.pending, (state) => {
-            state.status = "pending";
+            return {...state, status : "pending" }
         })
-        builder.addCase(upload_link.fulfilled, (state, action: PayloadAction<ResponseType>) => {
-            state.status = "fullfilled";
-            state.data = action.payload;
+       .addCase(upload_link.fulfilled, (state, action: PayloadAction<ResponseType>) => {
+            return {...state, status : "fulfilled", data : action.payload}
         })
-        builder.addCase(upload_link.rejected,(state)=>{
-            state.status="rejected";
+        .addCase(upload_link.rejected,(state)=>{
+            return {...state, status : "rejected"}
         })
     }
 })
