@@ -23,16 +23,7 @@ import { useAppDispatch } from '@/app/Hook';
 import { fetch_files_fun } from '@/slice/Fetchfiles';
 import { useNavigate } from 'react-router-dom';
 import { changestate } from '@/slice/StatusUpdate';
-
-
-interface mydata {
-    size: number,
-    birthtime: string,
-    directory: boolean,
-    file: boolean,
-    symlink: boolean,
-    name: string
-}
+import { mydata } from './Contentbar';
 
 interface myprops {
     fileobj: mydata,
@@ -89,6 +80,7 @@ const FileGrid = (props: myprops) => {
             setIconSelected(value);
         }
     }, [file_type])
+    
 
     const Download_handler = async () => {
         const token: string | null = localStorage.getItem('token');

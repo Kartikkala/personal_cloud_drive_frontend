@@ -4,7 +4,7 @@ const initialState: string | null = null;
 
 
 const Stream_slice = createSlice({
-    name: "Status_update",
+    name: "StreamSlice",
     initialState,
     reducers: {
         nullset: (state) => null,

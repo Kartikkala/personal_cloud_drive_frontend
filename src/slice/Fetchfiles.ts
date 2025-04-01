@@ -4,8 +4,8 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 interface mydata {
     size: number,
     birthtime: string,
-    directory: boolean,
-    file: boolean,
+    isDirectory: boolean,
+    isFile: boolean,
     symlink: boolean,
     name: string,
 
@@ -28,7 +28,7 @@ const initialState: InitialType = {
 }
 
 // thunk function:
-export const fetch_files_fun = createAsyncThunk("fetchFiles", async () => {
+export const fetch_files_fun = createAsyncThunk("fetchFiles", async (targetPath : string = "/") => {
     console.log('Fetch files called!')
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/fs/ls", {
@@ -37,7 +37,7 @@ export const fetch_files_fun = createAsyncThunk("fetchFiles", async () => {
             'Content-Type': "application/json",
             "Authorization": token as string
         },
-        body: JSON.stringify({ targetPath: "/" })
+        body: JSON.stringify({ targetPath: targetPath })
     })
     const json = await response.json();
     console.log(json)

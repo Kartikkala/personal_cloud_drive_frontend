@@ -13,20 +13,21 @@ import History from '../Top/History'
 import { useAppDispatch, useAppSelector } from "@/app/Hook";
 import { fetch_files_fun } from "../../../slice/Fetchfiles";
 import { changeState } from "@/slice/Videofiles";
+import Breadcrumb from "./BreadCrumb/Breadcrumb";
 
-interface mydata {
+export interface mydata {
     size: number,
     birthtime: string,
-    directory: boolean,
-    file: boolean,
+    isDirectory: boolean,
+    isFile: boolean,
     symlink: boolean,
     name: string
 }
 interface myda {
     size: number,
     birthtime: string,
-    directory: boolean,
-    file: boolean,
+    isDirectory: boolean,
+    isFile: boolean,
     symlink: boolean,
     name: string
     category: string
@@ -69,11 +70,28 @@ const Contentbar = (props: getting_props) => {
         dispatch(fetch_files_fun());
     }, [])
 
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Use tree here---------------------------------------------------------------------------------------------------------<----------
+    // Array se bhi kaam hojayega XD
+
+    // TODO: Enable folder delete/operations
+    // Keep folders on top / sort
+    // Fix delete operation inside folder
+    // Use Bigint at backend to store the size of user's dir
+
     // const [files, setfiles] = useState<mydata[]>(data);
     const [videofiles, setvideofiles] = useState<mydata[]>([]);
     const [audiofiles, setaudiofiles] = useState<mydata[]>([]);
     const [imagefiles, setimagefiles] = useState<mydata[]>([]);
     const [documentfiles, setdocumentfiles] = useState<mydata[]>([]);
+    const [directories, setDirectories] = useState<mydata[]>([]);
     const [morefiles, setmorefiles] = useState<mydata[]>([]);
     const [filesize, setfilesize] = useState<size>(sizedata);
 
@@ -115,11 +133,10 @@ const Contentbar = (props: getting_props) => {
     const [files_addtional, setfiles_additional] = useState<myda[]>([])
 
     useEffect(() => {
-        const videos: mydata[] = []; const audios: mydata[] = []; const images: mydata[] = []; const documents: mydata[] = []; const more: mydata[] = [];
+        const videos: mydata[] = []; const audios: mydata[] = []; const images: mydata[] = []; const documents: mydata[] = []; const more: mydata[] = []; const folders : mydata[] = []
         const sizeobj: size = { ...sizedata };
         const files_copy: myda[] = [];
 
-        // files.forEach((file) => {
         if(Array.isArray(files))
         {
             for (let i = 0; i < files.length; i++) {
@@ -152,13 +169,18 @@ const Contentbar = (props: getting_props) => {
                     const file_copy: myda = { ...file, category: "Documents" };
                     files_copy.push(file_copy);
                 }
+                else if(file.isDirectory)
+                {
+                    folders.push(file);
+                    const file_copy : myda = {...file, category : "Folders"};
+                    files_copy.push(file_copy)
+                }
                 else {
                     more.push(file);
                     sizeobj.morefilesize += file.size;
                     const file_copy: myda = { ...file, category: "More" };
                     files_copy.push(file_copy);
                 }
-                // })
             }
 
         }
@@ -173,6 +195,7 @@ const Contentbar = (props: getting_props) => {
         setaudiofiles(audios);
         setimagefiles(images);
         setdocumentfiles(documents);
+        setDirectories(folders);
         setmorefiles(more);
         setfilesize(sizeobj);
 
@@ -212,8 +235,11 @@ const Contentbar = (props: getting_props) => {
                         <input type="text" onChange={search_onchange} className="text-text-secondary focus:outline-none font-Josefin xl:ml-0 ml-8 w-full md:text-base sm:text-lg bg-primary-background" name="search" id="search" placeholder="Search by Name" value={searchbar} />
                     </div>
                 </div>
+                <div className="flex w-full gap-8 items-center">
+                    <h1 className="xl:text-3xl text-2xl font-bold my-7 text-text-heading">All Files</h1>
+                    <Breadcrumb/>
+                </div>
 
-                <h1 className="xl:text-3xl text-2xl font-bold my-7 text-text-heading">All Files</h1>
                 
                 {/* Div to keep File organizers and files inside */}
                 <div className="flex flex-col h-full">

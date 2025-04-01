@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, current } from '@reduxjs/toolkit'
 import LinkUploadReducers from '../slice/Link_upload'
 import FetchfilesReducers from '../slice/Fetchfiles'
 import StateupdateReducers from '../slice/StatusUpdate'
@@ -6,6 +6,7 @@ import StreamsliceReducers from '../slice/Streamslice'
 import VideofileReducers from '../slice/Videofiles'
 import UserReducers from '../slice/UserInfo'
 import DownloadReducer from '../slice/ServerDownloads'
+import CurrentPath from '../slice/CurrentPath'
 
 export const store = configureStore({
     reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
         Stream_slice: StreamsliceReducers,
         Video_file: VideofileReducers,
         user : UserReducers,
-        serverDownloads : DownloadReducer
+        serverDownloads : DownloadReducer,
+        currentPath : CurrentPath
     },
 })
 
