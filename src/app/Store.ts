@@ -7,6 +7,7 @@ import VideofileReducers from '../slice/Videofiles'
 import UserReducers from '../slice/UserInfo'
 import DownloadReducer from '../slice/ServerDownloads'
 import CurrentPath from '../slice/CurrentPath'
+import StorageUsage from '../slice/FetchStorageUsage'
 
 export const store = configureStore({
     reducer: {
@@ -17,7 +18,8 @@ export const store = configureStore({
         Video_file: VideofileReducers,
         user : UserReducers,
         serverDownloads : DownloadReducer,
-        currentPath : CurrentPath
+        currentPath : CurrentPath,
+        storageUsage: StorageUsage
     },
 })
 

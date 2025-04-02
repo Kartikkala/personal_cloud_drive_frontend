@@ -132,6 +132,22 @@ const Contentbar = (props: getting_props) => {
 
     const [files_addtional, setfiles_additional] = useState<myda[]>([])
 
+    // Handle folder click
+    const currentPath = useAppSelector((state)=>state.currentPath)
+
+    useEffect(()=>{
+        console.log("currentPath changed:", currentPath);
+        if(currentPath[currentPath.length-1] === "/")
+        {
+            dispatch(fetch_files_fun("/"))
+        }
+        else{
+            let path = currentPath.join("/")
+            path = path.slice(1)
+            dispatch(fetch_files_fun(path))
+        }
+    }, [currentPath])
+
     useEffect(() => {
         const videos: mydata[] = []; const audios: mydata[] = []; const images: mydata[] = []; const documents: mydata[] = []; const more: mydata[] = []; const folders : mydata[] = []
         const sizeobj: size = { ...sizedata };

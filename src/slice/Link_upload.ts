@@ -1,4 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { useAppDispatch } from "@/app/Hook";
+import { fetch_files_fun } from "./Fetchfiles";
+import { fetchStorageUsage } from "./FetchStorageUsage";
 
 interface ResponseType {
     guid: string | undefined,
@@ -22,7 +25,7 @@ const initialState: InitialType = {
 }
 
 // thunk function:
-export const upload_link = createAsyncThunk("aria/downloadFileServer", async (uri: string) => {
+export const upload_link = createAsyncThunk("aria/downloadFileServer", async (uri: string, {dispatch}) => {
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/aria/downloadFileServer", {
         method: "POST",
@@ -33,6 +36,12 @@ export const upload_link = createAsyncThunk("aria/downloadFileServer", async (ur
         body: JSON.stringify({uri})
     })
     const json = await response.json();
+    console.log(json)
+    if(json.success && !json.sizeLimitExceeded)
+    {
+        dispatch(fetch_files_fun("/"))
+        dispatch(fetchStorageUsage())
+    }
     return json;
 })
 

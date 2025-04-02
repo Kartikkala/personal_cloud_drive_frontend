@@ -8,6 +8,7 @@ import DownloadStatusSection from './DownloadStatusSection';
 import FileUploadSection from './FileUploadSection'; 
 import socket from '../Socket'; 
 import axios from 'axios';
+import { fetchStorageUsage } from '@/slice/FetchStorageUsage';
 
 const Rightbar = () => {
     const dispatch = useAppDispatch();
@@ -164,7 +165,7 @@ const Rightbar = () => {
                 setFileUploadMessage(`Upload failed: ${json.message || 'Server error'}`);
             } else {
                 setFileUploadMessage('File uploaded successfully!');
-                dispatch(fetch_files_fun());
+                dispatch(fetch_files_fun("/"));
                 setFileState(null); // Clear file state after successful upload
                 setTimeout(() => setFileUploadMessage(null), 3000); // Clear message after delay
             }
@@ -214,6 +215,7 @@ const Rightbar = () => {
         } else if (file_state) {
             // Handle file submission
             await inputFileUpload();
+            dispatch(fetchStorageUsage())
         } else {
             console.log("Neither link nor file provided."); // Should ideally not happen if button is disabled correctly
         }

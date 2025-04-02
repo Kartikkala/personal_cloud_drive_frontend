@@ -12,16 +12,16 @@ const CurrentPath = createSlice({
             return ["/"]   
         },
         addDirectory: (state, val) => {
-            state.push(val.payload)
-            return state
+            return [...state, val.payload];
         },
         removeDirectory: (state, val?) =>{
             if(val && typeof val.payload === "number")
             {
-                for(let i=0;i<val.payload;i++)
+                for(let i=state.length-1;i>val.payload;i--)
                 {
-                    state.pop()
+                    return state.slice(0, val.payload + 1);
                 }
+                return state
             }
         },
 

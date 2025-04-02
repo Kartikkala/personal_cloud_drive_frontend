@@ -28,8 +28,7 @@ const initialState: InitialType = {
 }
 
 // thunk function:
-export const fetch_files_fun = createAsyncThunk("fetchFiles", async (targetPath : string = "/") => {
-    console.log('Fetch files called!')
+export const fetch_files_fun = createAsyncThunk("fetchFiles", async (targetPath : string | undefined = "/") => {
     const token: string | null = localStorage.getItem('token');
     const response = await fetch("http://localhost:5000/api/fs/ls", {
         method: "POST",
@@ -40,7 +39,6 @@ export const fetch_files_fun = createAsyncThunk("fetchFiles", async (targetPath 
         body: JSON.stringify({ targetPath: targetPath })
     })
     const json = await response.json();
-    console.log(json)
     return json || [];
 })
 

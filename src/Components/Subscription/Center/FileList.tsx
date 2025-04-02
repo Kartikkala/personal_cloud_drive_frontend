@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDelete } from "react-icons/md";
 import { FiDownload } from "react-icons/fi";
@@ -10,7 +10,7 @@ import {
     MenubarMenu,
     MenubarTrigger,
 } from "@/shadcn/ui/menubar"
-import { useAppDispatch } from '@/app/Hook';
+import { useAppDispatch, useAppSelector } from '@/app/Hook';
 import { fetch_files_fun } from '@/slice/Fetchfiles';
 import { changestate } from '@/slice/Streamslice';
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,8 @@ import { FileQuestion } from 'lucide-react';
 import { Image } from 'lucide-react';
 import { mydata } from './Contentbar';
 import { addDirectory } from '@/slice/CurrentPath';
+import { normalizePath } from './utils';
+import { fetchStorageUsage } from '@/slice/FetchStorageUsage';
 
 interface myprops {
     fileobj: mydata,
@@ -55,6 +57,7 @@ const FileList = (props: myprops) => {
         const value = () => obj[file_type];
         setSelectedicon(value);
     }, [file_type])
+    
 
     const handleFolderClick = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -68,9 +71,10 @@ const FileList = (props: myprops) => {
         }, 300)
         if (fileobj.isDirectory) {
             dispatch(addDirectory(`${fileobj.name}`))
-            dispatch(fetch_files_fun(`/${fileobj.name}`));
         }
     };
+
+    const currentPath = useAppSelector((state)=>state.currentPath)
 
     const Downloadclick = async () => {
 
@@ -81,9 +85,10 @@ const FileList = (props: myprops) => {
                 "Authorization": token as string,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ targetPath: `/${fileobj.name}` })
+            body: JSON.stringify({ targetPath: normalizePath(currentPath, fileobj.name)})
         })
         if (response.ok) {
+            dispatch(fetchStorageUsage())
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -106,23 +111,23 @@ const FileList = (props: myprops) => {
                 "Authorization": token as string,
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ targetPath: `/${fileobj.name}` })
+            body: JSON.stringify({ targetPath: `${normalizePath(currentPath, fileobj.name)}` })
         })
         const json = await response.json();
         if(Array.isArray(json))
-        {
-            const deleted = json.pop().deleted
+            {
+                const deleted = json.pop().deleted
             if(deleted)
             {
-                //Do something
+                dispatch(fetchStorageUsage())
             }
         }
-        dispatch(fetch_files_fun());
+        dispatch(fetch_files_fun(normalizePath(currentPath)));
     }
-
+    
     const playclick = () => {
         if (file_type == "Videos") {
-            const filepath = "/"+fileobj.name
+            const filepath = normalizePath(currentPath, fileobj.name)
             dispatch(changestate(filepath));
             navigate("/Streamvideos");
         }
@@ -133,7 +138,7 @@ const FileList = (props: myprops) => {
         <div className={`min-h-12 hover:bg-secondary-background bg-primary-background
         border-primary-border-color rounded-3xl flex justify-between items-center
         font-Josefin lg:px-4 px-2 xl:text-base sm:text-sm text-xs text-text-primary ${fileobj.isDirectory ? "cursor-pointer": null}`}
-        onClick={fileobj.isDirectory ? handleFolderClick : undefined}>
+        onDoubleClick={fileobj.isDirectory ? handleFolderClick : undefined}>
             
             
             <div className="flex w-[45%] items-center">
@@ -146,12 +151,12 @@ const FileList = (props: myprops) => {
             <div className="w-[3%] h-full hover:cursor-pointer border-blue-500 flex justify-center ">
                 <Menubar className="w-full h-full">
                     <MenubarMenu>
-                        <MenubarTrigger className='h-full w-full justify-between focus:bg-secondary-background hover:bg-secondary-background' 
-                         onDoubleClick={fileobj.isDirectory? handleFolderClick : undefined}
-                         >
-                            <HiDotsVertical className=' focus:text-text-primary text-text-primary'/>
+                        <MenubarTrigger className='h-full w-full justify-between focus:bg-secondary-background hover:bg-secondary-background relative' >
+                            <div className='h-full items-center flex w-8 absolute z-10'>
+                                <HiDotsVertical className=' focus:text-text-primary text-text-primary mx-auto'/>
+                            </div>
                         </MenubarTrigger>
-                            <MenubarContent className={`bg-secondary-background`} hidden={fileobj.isDirectory} align='end' alignOffset={-100}>
+                            <MenubarContent className={`bg-secondary-background`} align='end' alignOffset={-100}>
                                 <MenubarItem className='text-text-primary'>
                                     <button onClick={Downloadclick} className='flex items-center'><FiDownload className='text-text-primary mr-2  ' />   Download</button>
                                 </MenubarItem>
